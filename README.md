@@ -84,7 +84,7 @@ GitHub scheduled workflows can be delayed and can be disabled after 60 days with
 
 ## Downloadable version
 
-The [release ZIP](https://github.com/Mylittlestories/marinepath/releases) includes `index.html` with its release-time snapshot embedded. **Double-click it to use the local tools and match against that snapshot.** No server is required. To get fresh data, use the hosted website or download a newer release. Local-file snapshots do not update themselves.
+The [release ZIP](https://github.com/Mylittlestories/marinepath/releases) includes `index.html` with its release-time snapshot embedded. **Double-click it to use the local tools and match against that snapshot.** No server is required. To get fresh data, use the hosted website or download a newer release. Local-file snapshots do not update themselves. Leads older than 72 hours are excluded, so use the hosted site for current results rather than an old release snapshot.
 
 ## Privacy and optional AI
 
