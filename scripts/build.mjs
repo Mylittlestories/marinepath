@@ -1,0 +1,21 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+let html=await fs.readFile(path.join(root,'src/index.template.html'),'utf8');
+const engine=await fs.readFile(path.join(root,'src/engine.js'),'utf8');
+const ui=await fs.readFile(path.join(root,'src/ui.js'),'utf8');
+const css=await fs.readFile(path.join(root,'src/ui.css'),'utf8');
+const snapshot=JSON.parse(await fs.readFile(path.join(root,'data/jobs.json'),'utf8'));
+if(snapshot.schemaVersion!==1||!snapshot.sources)throw Error('Invalid snapshot schema');
+let a=html.indexOf('/* MarinePath v2 —'),b=html.indexOf("document.addEventListener('DOMContentLoaded', init);",a);
+if(a<0||b<0)throw Error('Engine template markers missing');html=html.slice(0,a)+engine+'\n'+html.slice(b);
+a=html.indexOf('/* Interface and connection registration. */');b=html.indexOf('</script>',a);html=html.slice(0,a)+ui+'\n'+html.slice(b);
+a=html.indexOf('<style id="marinepath-ui">')+'<style id="marinepath-ui">'.length;b=html.indexOf('</style>',a);html=html.slice(0,a)+css+'\n.snapshot-warning{border:1px solid var(--yellow)}\n'+html.slice(b);
+// Escaping '<' prevents remote advert text from closing the inert JSON script element.
+const payload=JSON.stringify(snapshot).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
+html=html.replace('</body>','<script type="application/json" id="marinepathData">'+payload+'</script>\n</body>');
+await fs.writeFile(path.join(root,'index.html'),html);
+const site=path.join(root,'_site');await fs.mkdir(path.join(site,'data'),{recursive:true});await fs.mkdir(path.join(site,'assets'),{recursive:true});
+await fs.writeFile(path.join(site,'index.html'),html);await fs.copyFile(path.join(root,'data/jobs.json'),path.join(site,'data/jobs.json'));await fs.copyFile(path.join(root,'assets/logo.svg'),path.join(site,'assets/logo.svg'));await fs.writeFile(path.join(site,'.nojekyll'),'');
+console.log('Built static Pages site with embedded fallback snapshot. No Python or runtime server.');

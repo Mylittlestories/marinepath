@@ -1,0 +1,13 @@
+node_modules/
+_site/
+release/
+playwright-report/
+test-results/
+*.log
+.env
+.env.*
+*.pem
+*.key
+*backup*.json
+*export*.json
+.DS_Store

@@ -1,0 +1,22 @@
+{
+  "name": "marinepath",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Private maritime career matching with a GitHub Actions data backend and GitHub Pages frontend",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "collect": "node scripts/collect.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs"
+  },
+  "dependencies": {
+    "cheerio": "1.0.0"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}
